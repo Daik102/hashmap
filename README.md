@@ -1,1 +1,1 @@
-# hashmap
+This is the hashmap project for the Odin Project.
