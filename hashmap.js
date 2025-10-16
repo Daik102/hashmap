@@ -1,13 +1,16 @@
 #!/usr/bin/env node
-const buckets = [];
 
-function hashMap() {
+let buckets = [];
+
+
+export function hashMap() {
   const loadFactor = 0.75;
   let capacity = 16;
-  const limit = capacity * loadFactor;
+  let limit = capacity * loadFactor;
   let entryCounter = 0;
+  let totalLength = 0;
 
-  for (i = 0; i < capacity; i++) {
+  for (let i = 0; i < capacity; i++) {
     buckets.push([]);
   }
 
@@ -25,40 +28,42 @@ function hashMap() {
 
   const set = (key, value) => {
     const hashCode = hash(key);
-
-    if (buckets[hashCode][0]) {
-      for (i = 0; i < buckets[hashCode].length; i++) {
-        if (buckets[hashCode][i].key === key) {
-          buckets[hashCode][i].value = value;
-          break;
-        }
-
-        buckets[hashCode].push({key, value});
-      }
-    } else {
-      buckets[hashCode].push({key, value});
-    }
     
-    entryCounter += 1;
+    if (buckets[hashCode][0]) {
+      for (let i = 0; i < buckets[hashCode].length; i++) {
+        const entry = buckets[hashCode][i];
+        
+        if (entry.key === key) {
+          entry.value = value;
+          return;
+        }
+      }
+    }
 
-    if (entryCounter >= limit) {
-      for (i = 0; i < capacity; i++) {
+    buckets[hashCode].push({ key, value });
+    entryCounter += 1;
+    totalLength += 1;
+    
+    if (entryCounter === limit + 1) {
+      for (let i = 0; i < capacity; i++) {
         buckets.push([]);
       }
 
       capacity = capacity * 2;
+      limit = capacity * loadFactor;
     }
   };
 
   const get = (key) => {
-    for (i = 0; i < buckets.length; i++) {
+    for (let i = 0; i < buckets.length; i++) {
       const bucket = buckets[i];
       
-      for (j = 0; j < bucket.length; j++) {
+      for (let j = 0; j < bucket.length; j++) {
         const keyInBucket = bucket[j].key;
+        const valueInBucket = bucket[j].value;
         
         if (keyInBucket === key) {
-          return bucket[j].value;
+          return valueInBucket;
         }
       }
     }
@@ -67,10 +72,10 @@ function hashMap() {
   };
 
   const has = (key) => {
-    for (i = 0; i < buckets.length; i++) {
+    for (let i = 0; i < buckets.length; i++) {
       const bucket = buckets[i];
       
-      for (j = 0; j < bucket.length; j++) {
+      for (let j = 0; j < bucket.length; j++) {
         const keyInBucket = bucket[j].key;
         
         if (keyInBucket === key) {
@@ -80,13 +85,104 @@ function hashMap() {
     }
 
     return false;
-  }; 
+  };
+
+  const remove = (key) => {
+    for (let i = 0; i < buckets.length; i++) {
+      const bucket = buckets[i];
+      
+      for (let j = 0; j < bucket.length; j++) {
+        const keyInBucket = bucket[j].key;
+        
+        if (keyInBucket === key) {
+          bucket.splice(j, 1);
+          entryCounter -= 1;
+          totalLength -= 1;
+          return true;
+        }
+      }
+    }
+
+    return false;
+  };
+
+  const length = () => totalLength;
+
+  const clear = () => {
+    buckets = [];
+    capacity = 16;
+    limit = capacity * loadFactor;
+
+    for (let i = 0; i < capacity; i++) {
+    buckets.push([]);
+  }
+
+    return 'Cleared';
+  };
+
+  const keys = () => {
+    const keysList = [];
+
+    for (let i = 0; i < buckets.length; i++) {
+      const bucket = buckets[i];
+      
+      if (bucket[0]) {
+        for (let j = 0; j < bucket.length; j++) {
+          const keyInBucket = bucket[j].key;
+          keysList.push(keyInBucket);
+        }
+      }
+    }
+
+    return keysList;
+  };
+
+  const values = () => {
+    const valuesList = [];
+
+    for (let i = 0; i < buckets.length; i++) {
+      const bucket = buckets[i];
+      
+      if (bucket[0]) {
+        for (let j = 0; j < bucket.length; j++) {
+          const valueInBucket = bucket[j].value;
+          valuesList.push(valueInBucket);
+        }
+      }
+    }
+
+    return valuesList;
+  };
+
+  const entries = () => {
+    const entriesList = [];
+
+    for (let i = 0; i < buckets.length; i++) {
+      const bucket = buckets[i];
+      
+      if (bucket[0]) {
+        for (let j = 0; j < bucket.length; j++) {
+          const keyInBucket = bucket[j].key;
+          const valueInBucket = bucket[j].value;
+          entriesList.push([keyInBucket, valueInBucket]);
+        }
+      }
+    }
+
+    return entriesList;
+  };
 
   return {
     hash,
     set,
     get,
     has,
+    remove,
+    length,
+    clear,
+    keys,
+    values,
+    entries,
   };
 }
 
@@ -104,9 +200,17 @@ test.set('ice cream', 'white');
 test.set('jacket', 'blue');
 test.set('kite', 'pink');
 test.set('lion', 'golden');
+test.set('apple', 'green');
+test.set('moonlight', 'silver');
+test.set('uniform', 'navy');
 
 const getOne = test.get('banana');
 const hasOne = test.has('peach');
+const removeOne = test.remove('moonlight');
+const lengthOne = test.length();
+const keysOne = test.keys();
+const valuesOne = test.values();
+const entriesOne = test.entries();
 
-console.log(hasOne);
+console.log(buckets);
 
