@@ -4,7 +4,6 @@ export function hashMap() {
   const loadFactor = 0.75;
   let capacity = 16;
   let limit = capacity * loadFactor;
-  let entryCounter = 0;
   let totalLength = 0;
   let buckets = [];
 
@@ -39,10 +38,9 @@ export function hashMap() {
     }
 
     buckets[hashCode].push({ key, value });
-    entryCounter += 1;
     totalLength += 1;
     
-    if (entryCounter === limit + 1) {
+    if (totalLength === limit + 1) {
       for (let i = 0; i < capacity; i++) {
         buckets.push([]);
       }
@@ -94,7 +92,6 @@ export function hashMap() {
         
         if (keyInBucket === key) {
           bucket.splice(j, 1);
-          entryCounter -= 1;
           totalLength -= 1;
           return true;
         }
@@ -111,7 +108,6 @@ export function hashMap() {
     capacity = 16;
     limit = capacity * loadFactor;
     totalLength = 0;
-    entryCounter = 0;
 
     for (let i = 0; i < capacity; i++) {
     buckets.push([]);
@@ -191,7 +187,6 @@ export function hashSet() {
   const loadFactor = 0.75;
   let capacity = 16;
   let limit = capacity * loadFactor;
-  let entryCounter = 0;
   let totalLength = 0;
   let buckets = [];
 
@@ -225,10 +220,9 @@ export function hashSet() {
     }
 
     buckets[hashCode].push(key);
-    entryCounter += 1;
     totalLength += 1;
     
-    if (entryCounter === limit + 1) {
+    if (totalLength === limit + 1) {
       for (let i = 0; i < capacity; i++) {
         buckets.push([]);
       }
@@ -263,7 +257,6 @@ export function hashSet() {
         
         if (keyInBucket === key) {
           bucket.splice(j, 1);
-          entryCounter -= 1;
           totalLength -= 1;
           return true;
         }
@@ -280,7 +273,6 @@ export function hashSet() {
     capacity = 16;
     limit = capacity * loadFactor;
     totalLength = 0;
-    entryCounter = 0;
 
     for (let i = 0; i < capacity; i++) {
     buckets.push([]);

@@ -21,11 +21,10 @@ test.set('dog', 'white');
 test.set('moon', 'silver');
 test.set('grape', 'yellow green');
 test.set('ice cream', 'dark brown');
-test.set('uniform', 'navy');
 
 const getOne = test.get('banana');
 const hasOne = test.has('peach');
-const removeOne = test.remove('uniform');
+// const removeOne = test.remove('moon');
 const lengthOne = test.length();
 // const clearOne = test.clear();
 const keysOne = test.keys();
@@ -57,10 +56,9 @@ testTwo.set('kite');
 testTwo.set('lion');
 testTwo.set('apple');
 testTwo.set('moon');
-testTwo.set('uniform');
 
 const hasTwo = testTwo.has('peach');
-const removeTwo = testTwo.remove('uniform');
+// const removeTwo = testTwo.remove('moon');
 const lengthTwo = testTwo.length();
 // const clearTwo = testTwo.clear();
 const keysTwo = testTwo.keys();
