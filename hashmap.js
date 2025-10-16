@@ -110,6 +110,8 @@ export function hashMap() {
     buckets = [];
     capacity = 16;
     limit = capacity * loadFactor;
+    totalLength = 0;
+    entryCounter = 0;
 
     for (let i = 0; i < capacity; i++) {
     buckets.push([]);
@@ -277,6 +279,8 @@ export function hashSet() {
     buckets = [];
     capacity = 16;
     limit = capacity * loadFactor;
+    totalLength = 0;
+    entryCounter = 0;
 
     for (let i = 0; i < capacity; i++) {
     buckets.push([]);
